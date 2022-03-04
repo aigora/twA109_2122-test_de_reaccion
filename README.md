@@ -1,11 +1,14 @@
-# [Título del trabajo]
+# Test de Reacción 
 
-[Descripción breve del proyecto a realizar (2-3 frases).]
+Se realizará un test de reacción a varias personas.
+Estará formado por 2 luces leds, un pulsador y un contador.
+El programa recogerá los datos principales del usuario y su resultado además de archivarlo.
 
 ## Integrantes del equipo
 
-[Nombres, apellidos, y usuario GitHub de los integrantes del equipo.]
+Pablo Manuel Sánchez González 
 
 ## Objetivos del trabajo
 
-[Lista de los objetivos que se persiguen con el trabajo propuesto.]
+Realizar un estudio sobre la capacidad de reacción 
+de las personas y como este empeora con los años
