@@ -50,3 +50,50 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+
+//Menu trabajo
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define long 20
+
+int menu_ppal(void)
+{
+	int i, edad, opcion, hay_valores = 0;
+	double tiempo;
+	char nombre[long], apellido[long];
+	do
+	{
+		printf("1-Tomar datos personales.\n");
+		printf("2-Iniciar test\n");
+		printf("3-Registro\n");
+		printf("4-Salir\n");
+		scanf("%d", &opcion);
+		if (hay_valores == 0 && opcion > 1 && opcion < 4)
+			printf("\nAntes de nada es necesario -> 1- Tomar datos personales.\n");
+		else
+		switch (opcion) {
+		case 1:
+			hay_valores = 1;
+			printf("Dime tu nombre: \n");
+			fgets(nombre, long, stdin);
+			printf("Dime tu apellido: \n");
+			fgets(apellido, long, stdin);
+			printf("Hola %s %s", nombre, apellido);
+			printf("Dime tu edad: \n");
+			scanf_s("%d", &edad);
+			break;
+		case 2:
+			//Aqui se realizará el test conectandolo con arduino
+			break;
+		case 3:
+			//Aqui leerá los datos del fichero que contiene las demás pruebas y resultados
+			break;
+		case 4:
+			break;
+		default:
+			printf("Opcion inexistente\n");
+		}
+	} while (opcion != 4);
+}
