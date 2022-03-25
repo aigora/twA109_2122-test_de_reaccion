@@ -97,3 +97,23 @@ int menu_ppal(void)
 		}
 	} while (opcion != 4);
 }
+
+//INDICADORES (2 LEDS) + SENSOR (BOTON)
+
+const int LED1=8; //ROJO
+const int LED2=9; //VERDE
+const int BOTON=7;
+int val;
+void setup(){
+pinMode(LED1,OUTPUT);
+pinMode(LED2,OUTPUT);
+pinMode(BOTON,INPUT);
+}
+
+//PUESTO QUE NO ME HA LLEGADO EL BOTON NO PUEDO PROBAR EL CODIGO RELACIONADO A EL, EN UNOS DIAS ME LLEGA
+void loop(){
+val=digitalRead(BOTON);
+if  (val==HIGH){
+digitalWrite(LED2,LOW);
+}
+}
