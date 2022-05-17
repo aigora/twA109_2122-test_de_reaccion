@@ -1,0 +1,30 @@
+int pulsador = 6;
+int LEDV = 5;
+int LEDR = 4;
+int estado=LOW;
+long int tiempo1 =0;
+long int tiempo2 =0;
+long int time =0;
+
+void setup() {
+  pinMode(pulsador, INPUT);
+  pinMode(LEDV, OUTPUT);
+  pinMode(LEDR, OUTPUT);
+  digitalWrite(LEDV, LOW);
+  digitalWrite(LEDR, HIGH);
+}
+
+void loop() {
+  delay(random(2500, 10000));
+  digitalWrite(LEDR, LOW);
+  tiempo1 = millis();
+  digitalWrite(LEDV, HIGH);
+  while(digitalRead(pulsador)== LOW);
+  estado = digitalRead(LEDV);
+  digitalWrite(LEDV, !estado);
+  tiempo2 = millis();
+  time = tiempo2 - tiempo1;
+  while(digitalRead(pulsador)==HIGH);
+  
+  exit(0);
+}
