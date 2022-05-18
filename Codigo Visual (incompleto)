@@ -1,0 +1,126 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define N 20
+
+typedef struct {
+	char nombre[N], apellido[N];
+	int edad;
+	double time;
+}sujeto;
+
+int menu_ppal(void);
+void alta_sujetos(sujeto* a, int num);
+void crear_fichero(sujeto* a, int num);
+
+
+int main(void) {
+	Serial* Arduino;
+	sujeto* v;
+	int i, n, edad, opc, hay_valores = 0, posible = 0;
+	double tiempo;
+	char nombre[N], apellido[N], csalida, intro;
+	printf("¿Cuantos sujetos van a realizar la prueba?\n");
+	scanf_s("%d", &n);
+	v = (sujeto*)malloc(sizeof(sujeto) * n);
+	if (v == NULL)
+		printf("No hay memoria disponible\n");
+	else {
+		do
+		{
+			opc = menu_ppal();
+			if (hay_valores == 0 && opc > 1 && opc < 4)
+				printf("\nEs necesario -> 1- Tomar datos personales.\n");
+			else
+				switch (opc) {
+				case 1:
+					hay_valores = 1;
+					alta_sujetos(v, n);
+					break;
+				case 2:
+					//Aqui se realizará el test conectandolo con arduino
+					posible = 1;
+					break;
+				case 3:
+					if (posible == 0) {
+						printf("\nNo es posible crear el fichero sin realizar antes una prueba\n");
+					}
+					else {
+						crear_fichero(v, n);
+					}
+					break;
+				case 4:
+					if (posible == 0) {
+						printf("\n¿Seguro que quieres salir del programa sin realizar ninguna prueba?\n");
+						printf("Los datos introducidos previamente se perderán\n");
+						printf("S/N\n");
+						scanf_s("%c", csalida);
+						scanf_s("%c", intro);
+						if (csalida == 'S') {
+							opc = 5;
+							break;
+						}
+					}
+					else {
+						opc = 5;
+						break;
+					}
+				default:
+					printf("Opcion inexistente\n");
+				}
+		} while (opc != 5);
+	}
+	return 0;
+}
+
+int menu_ppal(void)
+{
+	int opcion;
+	char intro;
+	printf("\n");
+	printf("Menú Principal\n");
+	printf("==============\n");
+	printf("1-Tomar datos personales.\n");
+	printf("2-Iniciar test\n");
+	printf("3-Crear registro\n");
+	printf("4-Salir\n");
+	scanf_s("%d", &opcion);
+	scanf_s("%c", intro);
+	return opcion;
+}
+
+void alta_sujetos(sujeto* a, int num)
+{
+	int i;
+	for (i = 0; i < num; i++){
+		printf("Dime tu nombre: \n");
+		fgets(a[i].nombre, N, stdin);
+		printf("Dime tu apellido: \n");
+		fgets(a[i].apellido, N, stdin);
+		printf("Hola %s %s", a[i].nombre, a[i].apellido);
+		printf("Dime tu edad: \n");
+		scanf_s("%d", &a[i].edad);
+	}
+}
+
+void crear_fichero(sujeto* a, int num)
+{
+	FILE* fichero;
+	int i;
+	errno_t e;
+	e = fopen_s(&fichero, "Listado_Sujetos.txt", "wt");
+	if (fichero == NULL)
+		printf("No se ha podido guardar los datos\n");
+	else
+	{
+		for (i = 0; i < num; i++)
+		{
+			fprintf(fichero, "%s\n", a[i].nombre);
+			fprintf(fichero, "%s\n", a[i].apellido);
+			fprintf(fichero, "%d\n", a[i].edad);
+			fprintf(fichero, "%.3f\n", a[i].time);
+		}
+		fclose(fichero);
+	}
+
+}
