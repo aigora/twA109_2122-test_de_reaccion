@@ -4,7 +4,9 @@ int LEDR = 4;
 int estado=LOW;
 long int tiempo1 =0;
 long int tiempo2 =0;
-long int time =0;
+float time =0;
+String mensaje_entrada;
+String mensaje_salida;
 
 void setup() {
   pinMode(pulsador, INPUT);
@@ -12,9 +14,14 @@ void setup() {
   pinMode(LEDR, OUTPUT);
   digitalWrite(LEDV, LOW);
   digitalWrite(LEDR, HIGH);
+  Serial.begin(9600);
+  while(!Serial) { ; }
 }
 
 void loop() {
+  if(Serial.available()>0){
+    mensaje_entrada = Serial.readStringUntil('\n');
+    if (mensaje_entrada.compareTo("GET_TIEMPO")==0){
   delay(random(2500, 10000));
   digitalWrite(LEDR, LOW);
   tiempo1 = millis();
@@ -24,7 +31,28 @@ void loop() {
   digitalWrite(LEDV, !estado);
   tiempo2 = millis();
   time = tiempo2 - tiempo1;
+  mensaje_salida = (String) time;
   while(digitalRead(pulsador)==HIGH);
-  
+    }else{
+      mensaje_salida = "COMANDO DESCONOCIDO";
+      }
+      Serial.println(mensaje_salida);
+  }
   exit(0);
+}
+
+float ping(int TriggerPin, int EchoPin)
+{
+   long duration, distanceCm;
+    
+   digitalWrite(TriggerPin, LOW); 
+   delayMicroseconds(4);
+   digitalWrite(TriggerPin, HIGH); 
+   delayMicroseconds(10);
+   digitalWrite(TriggerPin, LOW);
+    
+   duration = pulseIn(EchoPin, HIGH); // Medimos el tiempo entre pulsos, en us.
+    
+   distanceCm = duration * 10 / 292/ 2; // Convertimos a distancia en cm.
+   return distanceCm;
 }
