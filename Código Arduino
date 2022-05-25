@@ -21,7 +21,7 @@ void setup() {
 void loop() {
   if(Serial.available()>0){
     mensaje_entrada = Serial.readStringUntil('\n');
-    if (mensaje_entrada.compareTo("GET_TIEMPO")==0){
+    if (mensaje_entrada.compareTo("START_TEST")==0){
   delay(random(2500, 10000));
   digitalWrite(LEDR, LOW);
   tiempo1 = millis();
@@ -39,20 +39,4 @@ void loop() {
       Serial.println(mensaje_salida);
   }
   exit(0);
-}
-
-float ping(int TriggerPin, int EchoPin)
-{
-   long duration, distanceCm;
-    
-   digitalWrite(TriggerPin, LOW); 
-   delayMicroseconds(4);
-   digitalWrite(TriggerPin, HIGH); 
-   delayMicroseconds(10);
-   digitalWrite(TriggerPin, LOW);
-    
-   duration = pulseIn(EchoPin, HIGH); // Medimos el tiempo entre pulsos, en us.
-    
-   distanceCm = duration * 10 / 292/ 2; // Convertimos a distancia en cm.
-   return distanceCm;
 }
