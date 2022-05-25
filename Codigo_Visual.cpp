@@ -209,7 +209,7 @@ float lanzar_test(Serial* Arduino)
 	if (Arduino->IsConnected())
 	{
 		bytesRecibidos = Enviar_y_Recibir(Arduino, "START_TEST\n", mensaje_recibido);
-		if (bytesRecibidos <= 0)
+		if (bytesRecibidos > 0)
 		{
 			bytesRecibidos = Enviar_y_Recibir(Arduino, "GET_TIEMPO\n", mensaje_recibido);
 			if (bytesRecibidos <= 0)
@@ -230,6 +230,10 @@ float lanzar_test(Serial* Arduino)
 				}
 			}
 			return tiempo;
+		}else{
+		printf("\nNo se ha recibido respuesta a la petición\n");
+				tiempo = -1;
+				return tiempo;
 		}
 	}
 }
