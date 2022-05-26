@@ -27,7 +27,7 @@ int main(void) {
 	sujeto* v;
 	char puerto[] = "COM3";
 	int i = 0, n, edad, opcion, hay_valores = 0, posible = 0;
-	char nombre[N], apellido[N], csalida, intro;
+	char nombre[N], apellido[N], intro;
 	Arduino = new Serial((char*)puerto);
 	printf("¿Cuantos sujetos van a realizar la prueba?\n");
 	scanf_s("%d", &n);
@@ -45,6 +45,8 @@ int main(void) {
 			printf("\n4 - Salir");
 			printf("\nIntroduzca opcion:");
 			scanf_s("%d", &opcion);
+			scanf_s("%c", &intro);
+
 
 			if (hay_valores == 0 && opcion > 1 && opcion < 6)
 				printf("\nAntes de hacer operaciones es necesario -> 1- Tomar datos personales\n");
@@ -88,13 +90,15 @@ int main(void) {
 void alta_sujetos(sujeto* a, int num)
 {
 	int i;
-	for (i = 0; i < num; i++){
+	char intro;
+	for (i = 0; i < num; i++) {
 		printf("Dime tu nombre: \n");
 		fgets(a[i].nombre, N, stdin);
 		printf("Dime tu apellido: \n");
 		fgets(a[i].apellido, N, stdin);
 		printf("Dime tu edad: \n");
 		scanf_s("%d", &a[i].edad);
+		scanf_s("%c", &intro);
 	}
 }
 
@@ -113,10 +117,11 @@ void crear_fichero(sujeto* a, int num)
 			fprintf(fichero, "%s\n", a[i].nombre);
 			fprintf(fichero, "%s\n", a[i].apellido);
 			fprintf(fichero, "%d\n", a[i].edad);
-			fprintf(fichero, "%.3f\n", a[i].time);
+			fprintf(fichero, "%.1f ms\n", a[i].time);
 			fprintf(fichero, "===========================\n");
 		}
 		fclose(fichero);
+		printf("Se ha creado el fichero");
 	}
 
 }
@@ -126,7 +131,6 @@ float verifica_sensores(Serial* Arduino, char* port)
 	float tiempo = 0;
 	if (Arduino->IsConnected())
 	{
-		start(Arduino);
 		tiempo = lanzar_test(Arduino);
 		if (tiempo != -1)
 			printf("\nTiempo: %f\n", tiempo);
@@ -211,7 +215,6 @@ float lanzar_test(Serial* Arduino)
 		bytesRecibidos = Enviar_y_Recibir(Arduino, "START_TEST\n", mensaje_recibido);
 		if (bytesRecibidos > 0)
 		{
-			bytesRecibidos = Enviar_y_Recibir(Arduino, "GET_TIEMPO\n", mensaje_recibido);
 			if (bytesRecibidos <= 0)
 			{
 				printf("\nNo se ha recibido respuesta a la petición\n");
@@ -220,6 +223,7 @@ float lanzar_test(Serial* Arduino)
 			else
 			{
 				printf("\nLa respuesta recibida tiene %d bytes. Recibido=%s\n", bytesRecibidos, mensaje_recibido);
+				Sleep(10000);
 				bytesRecibidos = Recibir(Arduino, mensaje_recibido);
 				if (bytesRecibidos > 0)
 					tiempo = float_from_cadena(mensaje_recibido);
