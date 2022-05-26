@@ -7,36 +7,45 @@ long int tiempo2 =0;
 float time =0;
 String mensaje_entrada;
 String mensaje_salida;
-
-void setup() {
-  pinMode(pulsador, INPUT);
-  pinMode(LEDV, OUTPUT);
-  pinMode(LEDR, OUTPUT);
-  digitalWrite(LEDV, LOW);
-  digitalWrite(LEDR, HIGH);
-  Serial.begin(9600);
-  while(!Serial) { ; }
+int test = 0;
+String tiempo;
+void setup ()  
+{
+    pinMode(pulsador, INPUT);
+    pinMode(LEDV, OUTPUT);
+    pinMode(LEDR, OUTPUT);
+    digitalWrite(LEDV, LOW);
+    digitalWrite(LEDR, HIGH);
+     Serial.begin(9600); // Configura velocidad puerto serie 9600 bits/sg.
+     while(!Serial) { ; } // Mientras no tenga conexión se queda en bucle.
 }
+void loop ()
+{
+     if( Serial.available()> 0) // Si hay datos disponibles en el puerto serie.
+     {
+        String str = Serial.readStringUntil('\n');
+        if (str.compareTo("START_TEST")==0){
+          str="Ok";  
+          test = 1;
+        }
+        else 
+          str="COMANDO DESCONOCIDO";
+        Serial.println(str);
 
-void loop() {
-  if(Serial.available()>0){
-    mensaje_entrada = Serial.readStringUntil('\n');
-    if (mensaje_entrada.compareTo("START_TEST")==0){
-  delay(random(2500, 10000));
-  digitalWrite(LEDR, LOW);
-  tiempo1 = millis();
-  digitalWrite(LEDV, HIGH);
-  while(digitalRead(pulsador)== LOW);
-  estado = digitalRead(LEDV);
-  digitalWrite(LEDV, !estado);
-  tiempo2 = millis();
-  time = tiempo2 - tiempo1;
-  mensaje_salida = (String) time;
-  while(digitalRead(pulsador)==HIGH);
-    }else{
-      mensaje_salida = "COMANDO DESCONOCIDO";
-      }
-      Serial.println(mensaje_salida);
-  }
-  exit(0);
+        if(test == 1){
+            delay(random(2500, 7000));
+            digitalWrite(LEDR, LOW);
+            tiempo1 = millis();
+            digitalWrite(LEDV, HIGH);
+            while(digitalRead(pulsador)== LOW);
+            estado = digitalRead(LEDV);
+            digitalWrite(LEDV, !estado);
+            tiempo2 = millis();
+            time = tiempo2 - tiempo1;
+            mensaje_salida = (String) time;
+            while(digitalRead(pulsador)==HIGH);
+          tiempo = ("El tiempo es de = %d ms", time);
+          Serial.println(tiempo);
+          }
+     }
 }
